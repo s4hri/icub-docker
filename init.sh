@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # $1: simulation $2: icub user, $3: icub psw, $4: icub host, $5: yarpmanager apps folder, $6 UID
+. /home/docky/workdir/icub.config
+export ICUB_NAME=$ICUB_NAME
 
 env_robot()
 {
@@ -47,10 +49,11 @@ yarprun --server /root --log &
 yarpmanager --apppath ${APPS}/applications/ --from ${APPS}/cluster-config.xml
 }
 
-if [ "$1" = true ]
+export ICUB_NAME="$ICUB_NAME"
+if [ "$ICUB_SIMULATION" = true ]
 then
-  env_sim $5
+  env_sim "$ICUB_APPS"
 else
-  env_robot $2 $3 $4 $5
+  env_robot "$ICUB_USER" "$ICUB_PSW" "$ICUB_HOST" "$ICUB_APPS"
 fi
 exit
