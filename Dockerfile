@@ -17,6 +17,8 @@ ARG ICUB_PARAMS="-DENABLE_icubmod_cartesiancontrollerclient=ON  \
                  -DYARP_DIR=$YARP_DIR \
                  -DCMAKE_INSTALL_PREFIX=${ICUB_DIR}"
 
+RUN apt-get install -y protobuf-compiler
+
 USER docky
 
 RUN cd /home/docky && \
@@ -44,9 +46,8 @@ ENV QT_LOGGING_RULES "*=false"
 
 RUN cd $HOME &&\
     git clone https://github.com/robotology/speech.git &&\
-    cd speech/svox-speech &&\
-    mkdir build && cd build &&\
-    cmake .. -DCMAKE_INSTALL_PREFIX=${YARP_DIR} &&\
+    cd speech && mkdir build && cd build &&\
+    cmake .. -DCMAKE_INSTALL_PREFIX=${YARP_DIR} -DBUILD_SVOX_SPEECH=ON &&\
     make -j$(nproc) &&\
     make install
 
